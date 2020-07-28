@@ -1,2 +1,2 @@
-# WaterMazeSimulator
-Water maze simulator for reinforcement learning
+# MorrisWaterMazeSimulator
+ Morris water maze simulator for reinforcement learning
