@@ -3,6 +3,7 @@ class Rat {
   float x, y;
   int reward;
   float d;
+  float[] distances = new float[4]; 
 
   Rat(float size) {
     r = size;
@@ -10,7 +11,7 @@ class Rat {
     y = height - 20;
   }
 
-  void action(int action, Maze m) {
+  float[] action(int action, Maze m) {
     float centered_x = x - width/2;
     float centered_y = y - height/2;
     d = (sqrt(centered_x*centered_x + centered_y*centered_y) - m.r/2 + r/2);
@@ -38,6 +39,17 @@ class Rat {
         y -= r/2;
       }
     }
+    // x^2 + y^2 = r^2
+    distances[3] = sqrt((m.r/2 * m.r/2) - (centered_x * centered_x)) + centered_y - r/2;  // distance from north
+    distances[2] = sqrt((m.r/2 * m.r/2) - (centered_x * centered_x)) - centered_y + r/2;  // distance from south
+    distances[1] = sqrt((m.r/2 * m.r/2) - (centered_y * centered_y)) + centered_x - r/2;  // distance from west
+    distances[0] = sqrt((m.r/2 * m.r/2) - (centered_y * centered_y)) - centered_x + r/2;  // distance from east
+    for(int i = 0; i < distances.length; i++){
+      if(distances[i] < 0){
+        distances[i] = 0;
+      }
+    }
+    return distances;
   }
 
   void display() {
@@ -60,7 +72,6 @@ class Rat {
       x = width/2;
       y = height - 20;
     }
-    reward = 0;
   }
 
   int getReward() {
@@ -70,7 +81,6 @@ class Rat {
   boolean innerGoal(Platform pl) {
     if (pl.x - (pl.r/2) <= x + r/2 && pl.x + (pl.r/2) >= x - r/2) {
       if (pl.y + (pl.r/2) >= y - r/2 && pl.y - (pl.r/2) <= y + r/2) {
-        reward = 1;
         return true;
       } else {
         return false;
